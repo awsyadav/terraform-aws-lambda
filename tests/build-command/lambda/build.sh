@@ -14,15 +14,16 @@
 #
 # Usage:
 #
-# $ ./build.sh "$(echo { \"filename\": \"out.zip\", \"runtime\": \"python3.7\", \"source_path\": \".\" \} | jq . | base64)"
-#
-# - Arguments to be provided as JSON, then Base64 encoded
+# $ ./build.sh <output-zip-filename> <runtime> <source-path>
 
 set -euo pipefail
 
-# Extract variables from the JSON-formatted, Base64 encoded input argument.
-# This is to conform to arguments as passed in by hash.py
-eval "$(echo $1 | base64 --decode | jq -r '@sh "FILENAME=\(.filename) RUNTIME=\(.runtime) SOURCE_PATH=\(.source_path)"')"
+echo "current dir is $(pwd) !!!"
+
+# Read variables from command line arguments
+FILENAME=$1
+RUNTIME=$2
+SOURCE_PATH=$3
 
 # Convert to absolute paths
 SOURCE_DIR=$(cd "$SOURCE_PATH" && pwd)
